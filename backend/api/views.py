@@ -24,7 +24,8 @@ class BookViewSet(viewsets.ModelViewSet):
                         
                         # Update description if it's missing or empty
                         if not data.get('description'):
-                            data['description'] = volume_info.get('description', '')
+                            fetched_desc = volume_info.get('description', '')
+                            data['description'] = fetched_desc if fetched_desc else "No description available for this title."
                             
                         # Update cover_url if it's the placeholder or missing
                         current_cover = data.get('cover_url', '')
@@ -46,6 +47,12 @@ class BookViewSet(viewsets.ModelViewSet):
                                 data['cover_url'] = 'https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=80&w=800&auto=format&fit=crop'
                         elif not current_cover:
                              data['cover_url'] = 'https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=80&w=800&auto=format&fit=crop'
+                    else:
+                        # API returned successfully but found 0 items
+                        if not data.get('description'):
+                            data['description'] = "No description available for this title."
+                        if not data.get('cover_url') or 'unsplash.com' in data.get('cover_url', ''):
+                            data['cover_url'] = 'https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?q=80&w=800&auto=format&fit=crop'
             except Exception as e:
                 print(f"Error fetching from Google Books API: {e}")
                 

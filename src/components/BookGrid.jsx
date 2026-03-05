@@ -49,7 +49,16 @@ export default function BookGrid({ books, setBooks }) {
 
                                     {/* FRONT OF CARD */}
                                     <div className="book-card-front bg-card flex flex-col items-center">
-                                        <img src={book.cover_url || '/book_1.png'} alt={book.title} className="w-full h-full object-cover rounded-inherit" style={{ borderRadius: 'inherit' }} />
+                                        <img
+                                            src={book.cover_url || '/book_1.png'}
+                                            alt={book.title}
+                                            className="w-full h-full object-cover rounded-inherit"
+                                            style={{ borderRadius: 'inherit' }}
+                                            onError={(e) => {
+                                                e.target.onerror = null; // Prevent infinite loops
+                                                e.target.src = "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=800&auto=format&fit=crop"; // Premium "mystery" fallback book
+                                            }}
+                                        />
                                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 pt-20 rounded-b-2xl">
                                             <h3 className="text-xl font-heading font-bold text-white mb-1 group-hover:text-brand transition-colors">{book.title}</h3>
                                             <p className="text-gray-400 text-sm font-medium">{book.author}</p>
