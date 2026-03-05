@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Star, Edit2, Trash2, ChevronRight } from 'lucide-react';
 
-export default function BookGrid() {
-    const [books, setBooks] = useState([]);
-
-    useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/books/')
-            .then(res => res.json())
-            .then(data => setBooks(data))
-            .catch(err => console.error('Error fetching books:', err));
-    }, []);
-
+export default function BookGrid({ books, setBooks }) {
     const getAverageRating = (reviews) => {
         if (!reviews || reviews.length === 0) return 0;
         const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
         return sum / reviews.length;
+    };
+
+    const handleDelete = async (id, e) => {
+        e.stopPropagation();
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/books/${id}/`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                setBooks(prevBooks => prevBooks.filter(book => book.id !== id));
+            } else {
+                console.error('Failed to delete book');
+            }
+        } catch (error) {
+            console.error('Error deleting book:', error);
+        }
     };
 
     return (
@@ -42,7 +49,7 @@ export default function BookGrid() {
 
                                     {/* FRONT OF CARD */}
                                     <div className="book-card-front bg-card flex flex-col items-center">
-                                        <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover border border-white/5 rounded-2xl" />
+                                        <img src={book.cover_url || '/book_1.png'} alt={book.title} className="w-full h-full object-cover border border-white/5 rounded-2xl" />
                                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 pt-20 rounded-b-2xl">
                                             <h3 className="text-xl font-heading font-bold text-white mb-1 group-hover:text-brand transition-colors">{book.title}</h3>
                                             <p className="text-gray-400 text-sm font-medium">{book.author}</p>
@@ -76,7 +83,7 @@ export default function BookGrid() {
                                             <button className="flex-1 glassmorphism hover:bg-white/5 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-colors border border-white/10 hover:border-brand/50 hover:text-brand">
                                                 <Edit2 className="h-4 w-4" /> Edit
                                             </button>
-                                            <button className="flex-1 glassmorphism hover:bg-red-500/10 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium text-red-400 hover:text-red-300 transition-colors border border-white/10 hover:border-red-500/50">
+                                            <button onClick={(e) => handleDelete(book.id, e)} className="flex-1 glassmorphism hover:bg-red-500/10 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium text-red-400 hover:text-red-300 transition-colors border border-white/10 hover:border-red-500/50">
                                                 <Trash2 className="h-4 w-4" /> Delete
                                             </button>
                                         </div>

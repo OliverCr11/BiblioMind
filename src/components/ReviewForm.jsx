@@ -1,9 +1,55 @@
 import React, { useState } from 'react';
 import { Star, Send } from 'lucide-react';
 
-export default function ReviewForm() {
+export default function ReviewForm({ setBooks }) {
+    const [title, setTitle] = useState('');
+    const [author, setAuthor] = useState('');
+    const [description, setDescription] = useState('');
+
+    // Kept generic rating interaction for the form UI
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!title.trim() || !author.trim()) return;
+
+        const newBook = {
+            title,
+            author,
+            description,
+            // Assigning a premium default cover image dynamically if it's empty
+            cover_url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop'
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/books/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newBook),
+            });
+
+            if (response.ok) {
+                const createdBook = await response.json();
+
+                // Immediately update local React state
+                setBooks(prevBooks => [...prevBooks, createdBook]);
+
+                // Reset form
+                setTitle('');
+                setAuthor('');
+                setDescription('');
+                setRating(0);
+            } else {
+                console.error("Failed to submit book");
+            }
+        } catch (error) {
+            console.error("Error submitting book:", error);
+        }
+    };
 
     return (
         <section className="py-20 relative z-20 bg-background-pure border-t border-white/5">
@@ -18,22 +64,28 @@ export default function ReviewForm() {
                         <p className="text-gray-400">Share your analytical insights with the community.</p>
                     </div>
 
-                    <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                    <form className="space-y-6" onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-300 ml-1">Book Title</label>
                                 <input
                                     type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
                                     className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
                                     placeholder="The Midnight Library"
+                                    required
                                 />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-300 ml-1">Author</label>
                                 <input
                                     type="text"
+                                    value={author}
+                                    onChange={(e) => setAuthor(e.target.value)}
                                     className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
                                     placeholder="Matt Haig"
+                                    required
                                 />
                             </div>
                         </div>
@@ -52,8 +104,8 @@ export default function ReviewForm() {
                                     >
                                         <Star
                                             className={`h-6 w-6 transition-colors ${star <= (hoverRating || rating)
-                                                    ? 'text-brand fill-brand glow-primary scale-110'
-                                                    : 'text-gray-600'
+                                                ? 'text-brand fill-brand glow-primary scale-110'
+                                                : 'text-gray-600'
                                                 }`}
                                         />
                                     </button>
@@ -65,6 +117,8 @@ export default function ReviewForm() {
                             <label className="text-sm font-medium text-gray-300 ml-1">Analysis / Review</label>
                             <textarea
                                 rows={5}
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
                                 className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all resize-none"
                                 placeholder="Dive deep into the narrative structure, thematic elements, and character development..."
                             ></textarea>
