@@ -50,6 +50,7 @@
   backface-visibility: hidden;
   border-radius: 1rem;
   overflow: hidden;
+  aspect-ratio: 2 / 3;
 }
 
 .book-card-back {
