@@ -4,6 +4,10 @@
 @config "../tailwind.config.js";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background-pure text-white font-body antialiased;
   }

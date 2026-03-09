@@ -76,7 +76,7 @@ export default function ReviewForm({ setBooks }) {
     };
 
     return (
-        <section className="py-20 relative z-20 bg-background-pure border-t border-white/5">
+        <section id="publish-review" className="py-20 relative z-20 bg-background-pure border-t border-white/5">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand/5 rounded-full blur-[120px] pointer-events-none"></div>
 
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
