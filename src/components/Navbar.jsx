@@ -24,6 +24,24 @@ export default function Navbar({ searchQuery, setSearchQuery, books }) {
 
     const hasNewBooks = books && books.length > 0;
 
+    const filteredBooks = books && searchQuery.trim() !== ''
+        ? books.filter(book => {
+            const query = searchQuery.toLowerCase();
+            return (
+                book.title.toLowerCase().includes(query) ||
+                book.author.toLowerCase().includes(query)
+            );
+        })
+        : [];
+
+    const handleResultClick = () => {
+        setSearchQuery('');
+        const section = document.getElementById('featured-books');
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <nav className="fixed top-0 w-full z-50 glassmorphism border-b border-white/10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,6 +77,40 @@ export default function Navbar({ searchQuery, setSearchQuery, books }) {
                             className="block w-full pl-11 pr-4 py-2.5 bg-background-pure/50 border border-white/10 rounded-full text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
                             placeholder="Search by title or author..."
                         />
+
+                        {/* Search Results Dropdown */}
+                        {searchQuery.trim().length > 0 && (
+                            <div className="absolute top-14 left-0 w-full glassmorphism border border-white/10 rounded-2xl shadow-2xl py-2 z-50 max-h-96 overflow-y-auto">
+                                {filteredBooks.length === 0 ? (
+                                    <div className="px-4 py-3 text-sm text-gray-400 text-center">
+                                        No books found matching "{searchQuery}"
+                                    </div>
+                                ) : (
+                                    filteredBooks.map((book) => (
+                                        <div
+                                            key={book.id}
+                                            onClick={handleResultClick}
+                                            className="px-4 py-3 hover:bg-white/5 transition-colors cursor-pointer flex items-center gap-4 border-b border-white/5 last:border-0 relative overflow-hidden group"
+                                        >
+                                            <div className="absolute top-0 left-0 w-1 h-full bg-transparent group-hover:bg-brand transition-colors"></div>
+                                            <img
+                                                src={book.cover_url || '/book_1.png'}
+                                                alt={book.title}
+                                                className="w-10 h-14 object-cover rounded shadow-md group-hover:scale-110 transition-transform"
+                                                onError={(e) => {
+                                                    e.target.onerror = null;
+                                                    e.target.src = "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=800&auto=format&fit=crop";
+                                                }}
+                                            />
+                                            <div>
+                                                <p className="text-sm font-bold text-white group-hover:text-brand transition-colors line-clamp-1">{book.title}</p>
+                                                <p className="text-xs text-purple-300 font-medium line-clamp-1">{book.author}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* End Actions */}
