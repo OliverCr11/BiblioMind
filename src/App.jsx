@@ -7,6 +7,7 @@ import RecentReviews from './components/RecentReviews';
 
 export default function App() {
   const [books, setBooks] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/books/')
@@ -16,11 +17,11 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen selection:bg-brand selection:text-white bg-background-pure">
-      <Navbar />
+    <div id="top" className="min-h-screen selection:bg-brand selection:text-white bg-background-pure">
+      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} books={books} />
       <main>
         <Hero />
-        <BookGrid books={books} setBooks={setBooks} />
+        <BookGrid books={books} setBooks={setBooks} searchQuery={searchQuery} />
         <ReviewForm setBooks={setBooks} />
         <RecentReviews />
       </main>
