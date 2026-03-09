@@ -37,25 +37,27 @@ export default function Navbar({ searchQuery, setSearchQuery, books }) {
     const handleResultClick = (bookId) => {
         setSearchQuery('');
 
-        // Find the specific book card
-        const cardElement = document.getElementById(`book-${bookId}`);
+        setTimeout(() => {
+            // Find the specific book card
+            const cardElement = document.getElementById(`book-${bookId}`);
 
-        if (cardElement) {
-            // Scroll it into the center of the viewport
-            cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (cardElement) {
+                // Scroll it into the center of the viewport
+                cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Apply the highlight glow effect
-            cardElement.classList.add('highlight-glow');
+                // Apply the highlight glow effect
+                cardElement.classList.add('highlight-glow');
 
-            // Remove the glow effect after 3 seconds
-            setTimeout(() => {
-                cardElement.classList.remove('highlight-glow');
-            }, 3000);
-        } else {
-            // Fallback: just scroll to the grid if the card isn't found
-            const section = document.getElementById('featured-books');
-            if (section) section.scrollIntoView({ behavior: 'smooth' });
-        }
+                // Remove the glow effect after 3 seconds
+                setTimeout(() => {
+                    cardElement.classList.remove('highlight-glow');
+                }, 3000);
+            } else {
+                // Fallback: just scroll to the grid if the card isn't found
+                const section = document.getElementById('featured-books');
+                if (section) section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 150);
     };
 
     return (
