@@ -34,15 +34,39 @@ export default function ReviewForm({ setBooks }) {
 
             if (response.ok) {
                 const createdBook = await response.json();
+                let finalBook = { ...createdBook, reviews: [] };
+
+                if (rating > 0) {
+                    const reviewPayload = {
+                        book: createdBook.id,
+                        reviewer_name: "Community Member",
+                        rating: rating,
+                        comment: description || "No written review."
+                    };
+
+                    const reviewResponse = await fetch('http://127.0.0.1:8000/api/reviews/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(reviewPayload),
+                    });
+
+                    if (reviewResponse.ok) {
+                        const createdReview = await reviewResponse.json();
+                        finalBook.reviews = [createdReview];
+                    }
+                }
 
                 // Immediately update local React state
-                setBooks(prevBooks => [...prevBooks, createdBook]);
+                setBooks(prevBooks => [...prevBooks, finalBook]);
 
                 // Reset form
                 setTitle('');
                 setAuthor('');
                 setDescription('');
                 setRating(0);
+                setHoverRating(0);
             } else {
                 console.error("Failed to submit book");
             }

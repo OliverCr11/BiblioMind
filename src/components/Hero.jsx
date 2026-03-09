@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookMarked, Star, Edit3 } from 'lucide-react';
 
 export default function Hero() {
+    const [stats, setStats] = useState({
+        total_books: 0,
+        total_reviews: 0,
+        average_rating: 0.0
+    });
+
+    useEffect(() => {
+        fetch('http://127.0.0.1:8000/api/stats/')
+            .then(res => res.json())
+            .then(data => setStats(data))
+            .catch(err => console.error("Error fetching stats:", err));
+    }, []);
+
     return (
         <div className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
             {/* Background with glowing particles and floating books representation */}
@@ -23,38 +36,38 @@ export default function Hero() {
                     </h1>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12 mb-10">
-                        <div className="glassmorphism p-6 rounded-2xl flex items-center justify-between hover:glow-primary transition-all cursor-default relative overflow-hidden group">
+                        <a href="#featured-books" className="glassmorphism p-6 rounded-2xl flex items-center justify-between hover:glow-primary transition-all cursor-pointer relative overflow-hidden group">
                             <div className="absolute top-0 left-0 w-1 h-full bg-brand group-hover:bg-purple-300 transition-colors"></div>
                             <div>
-                                <p className="text-sm text-gray-400 mb-1">Books Read</p>
-                                <p className="text-3xl font-heading font-bold text-white">142</p>
+                                <p className="text-sm text-gray-400 mb-1 pointer-events-none">Books Read</p>
+                                <p className="text-3xl font-heading font-bold text-white pointer-events-none">{stats.total_books}</p>
                             </div>
-                            <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center pointer-events-none">
                                 <BookMarked className="h-6 w-6 text-brand" />
                             </div>
-                        </div>
+                        </a>
 
-                        <div className="glassmorphism p-6 rounded-2xl flex items-center justify-between hover:glow-primary transition-all cursor-default relative overflow-hidden group">
+                        <a href="#recent-reviews" className="glassmorphism p-6 rounded-2xl flex items-center justify-between hover:glow-primary transition-all cursor-pointer relative overflow-hidden group">
                             <div className="absolute top-0 left-0 w-1 h-full bg-brand group-hover:bg-purple-300 transition-colors"></div>
                             <div>
-                                <p className="text-sm text-gray-400 mb-1">Reviews Written</p>
-                                <p className="text-3xl font-heading font-bold text-white">89</p>
+                                <p className="text-sm text-gray-400 mb-1 pointer-events-none">Reviews Written</p>
+                                <p className="text-3xl font-heading font-bold text-white pointer-events-none">{stats.total_reviews}</p>
                             </div>
-                            <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center pointer-events-none">
                                 <Edit3 className="h-6 w-6 text-brand" />
                             </div>
-                        </div>
+                        </a>
 
-                        <div className="glassmorphism p-6 rounded-2xl flex items-center justify-between hover:glow-primary transition-all cursor-default relative overflow-hidden group">
+                        <a href="#recent-reviews" className="glassmorphism p-6 rounded-2xl flex items-center justify-between hover:glow-primary transition-all cursor-pointer relative overflow-hidden group">
                             <div className="absolute top-0 left-0 w-1 h-full bg-brand group-hover:bg-purple-300 transition-colors"></div>
                             <div>
-                                <p className="text-sm text-gray-400 mb-1">Avg Rating</p>
-                                <p className="text-3xl font-heading font-bold text-white">4.8</p>
+                                <p className="text-sm text-gray-400 mb-1 pointer-events-none">Avg Rating</p>
+                                <p className="text-3xl font-heading font-bold text-white pointer-events-none">{stats.average_rating}</p>
                             </div>
-                            <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center pointer-events-none">
                                 <Star className="h-6 w-6 text-brand" />
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -25,7 +25,7 @@ export default function BookGrid({ books, setBooks }) {
     };
 
     return (
-        <section className="py-20 relative z-20 bg-background-zinc">
+        <section id="featured-books" className="py-20 relative z-20 bg-background-zinc">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div>
