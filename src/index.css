@@ -27,6 +27,12 @@
     box-shadow: 0 0 20px theme('colors.brand.glow');
   }
 
+  .highlight-glow {
+    box-shadow: 0 0 40px theme('colors.brand.DEFAULT');
+    transform: scale(1.02);
+    z-index: 30;
+  }
+
   .glassmorphism {
     @apply bg-card/90 backdrop-blur-xl border border-white/10;
   }

@@ -57,7 +57,7 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
                         filteredBooks.map((book) => {
                             const avgRating = getAverageRating(book.reviews);
                             return (
-                                <div key={book.id} className="book-card h-[450px] w-full group cursor-pointer">
+                                <div id={`book-${book.id}`} key={book.id} className="book-card h-[450px] w-full group cursor-pointer transition-all duration-500">
                                     <div className="book-card-inner relative w-full h-full rounded-2xl shadow-2xl">
 
                                         {/* FRONT OF CARD */}

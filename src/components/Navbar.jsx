@@ -34,11 +34,27 @@ export default function Navbar({ searchQuery, setSearchQuery, books }) {
         })
         : [];
 
-    const handleResultClick = () => {
+    const handleResultClick = (bookId) => {
         setSearchQuery('');
-        const section = document.getElementById('featured-books');
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth' });
+
+        // Find the specific book card
+        const cardElement = document.getElementById(`book-${bookId}`);
+
+        if (cardElement) {
+            // Scroll it into the center of the viewport
+            cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Apply the highlight glow effect
+            cardElement.classList.add('highlight-glow');
+
+            // Remove the glow effect after 3 seconds
+            setTimeout(() => {
+                cardElement.classList.remove('highlight-glow');
+            }, 3000);
+        } else {
+            // Fallback: just scroll to the grid if the card isn't found
+            const section = document.getElementById('featured-books');
+            if (section) section.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
@@ -89,7 +105,7 @@ export default function Navbar({ searchQuery, setSearchQuery, books }) {
                                     filteredBooks.map((book) => (
                                         <div
                                             key={book.id}
-                                            onClick={handleResultClick}
+                                            onClick={() => handleResultClick(book.id)}
                                             className="px-4 py-3 hover:bg-white/5 transition-colors cursor-pointer flex items-center gap-4 border-b border-white/5 last:border-0 relative overflow-hidden group"
                                         >
                                             <div className="absolute top-0 left-0 w-1 h-full bg-transparent group-hover:bg-brand transition-colors"></div>
