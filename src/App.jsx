@@ -4,15 +4,15 @@ import Hero from './components/Hero';
 import BookGrid from './components/BookGrid';
 import ReviewForm from './components/ReviewForm';
 import RecentReviews from './components/RecentReviews';
+import AuthModal from './components/AuthModal';
 
 export default function App() {
   const [books, setBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
-
-  // Mock current user to test ownership authorization for CRUD actions
-  const currentUser = { username: 'Oliver C.' };
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const handleLoginRedirect = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -36,6 +36,8 @@ export default function App() {
         setIsLoggedIn={setIsLoggedIn}
         isUserOpen={isUserOpen}
         setIsUserOpen={setIsUserOpen}
+        setIsAuthModalOpen={setIsAuthModalOpen}
+        currentUser={currentUser}
       />
       <main>
         <Hero />
@@ -49,6 +51,14 @@ export default function App() {
         <ReviewForm setBooks={setBooks} isLoggedIn={isLoggedIn} onLoginRedirect={handleLoginRedirect} />
         <RecentReviews isLoggedIn={isLoggedIn} books={books} />
       </main>
+
+      {isAuthModalOpen && (
+        <AuthModal
+          setIsAuthModalOpen={setIsAuthModalOpen}
+          setIsLoggedIn={setIsLoggedIn}
+          setCurrentUser={setCurrentUser}
+        />
+      )}
 
       {/* Footer */}
       <footer className="bg-background-pure border-t border-white/10 py-12 text-center text-gray-500 text-sm">

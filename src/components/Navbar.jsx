@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BookOpen, Search, User, Bell, LogOut, Settings } from 'lucide-react';
 
-export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn, setIsLoggedIn, isUserOpen, setIsUserOpen }) {
+export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn, setIsLoggedIn, isUserOpen, setIsUserOpen, setIsAuthModalOpen, currentUser }) {
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const notifRef = useRef(null);
     const userRef = useRef(null);
@@ -182,8 +182,8 @@ export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn,
                                     {isLoggedIn ? (
                                         <>
                                             <div className="px-4 py-3 border-b border-white/5">
-                                                <p className="text-sm font-medium text-white">Oliver C.</p>
-                                                <p className="text-xs text-gray-400 truncate">oliver@bibliomind.test</p>
+                                                <p className="text-sm font-medium text-white">{currentUser?.username || "Authenticated User"}</p>
+                                                <p className="text-xs text-gray-400 truncate">Platform Member</p>
                                             </div>
 
                                             <div className="py-1">
@@ -206,7 +206,13 @@ export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn,
                                             </div>
 
                                             <div className="py-2 px-4">
-                                                <button onClick={() => setIsLoggedIn(true)} className="w-full bg-brand/10 hover:bg-brand text-brand hover:text-white border border-brand/30 hover:border-brand text-sm font-semibold py-2 rounded-xl transition-all shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                                                <button
+                                                    onClick={() => {
+                                                        setIsUserOpen(false);
+                                                        setIsAuthModalOpen(true);
+                                                    }}
+                                                    className="w-full bg-brand/10 hover:bg-brand text-brand hover:text-white border border-brand/30 hover:border-brand text-sm font-semibold py-2 rounded-xl transition-all shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+                                                >
                                                     Log In to BiblioMind
                                                 </button>
                                             </div>
