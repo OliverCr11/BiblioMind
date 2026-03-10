@@ -35,7 +35,10 @@ export default function AuthModal({ setIsAuthModalOpen, setIsLoggedIn, setCurren
             if (response.ok) {
                 if (isLoginTab) {
                     localStorage.setItem('token', data.token);
-                    setCurrentUser({ username });
+                    setCurrentUser({
+                        username: data.username,
+                        is_staff: data.is_staff
+                    });
                     setIsLoggedIn(true);
                     setIsAuthModalOpen(false);
                 } else {

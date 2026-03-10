@@ -190,9 +190,13 @@ export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn,
                                                 <a href="#" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
                                                     <User className="h-4 w-4 text-brand" /> My Profile <span className="text-[10px] text-brand bg-brand/10 px-1.5 py-0.5 rounded-full ml-auto">Soon</span>
                                                 </a>
-                                                <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                                                    <Settings className="h-4 w-4 text-gray-400" /> Django Admin
-                                                </a>
+
+                                                {currentUser?.is_staff && (
+                                                    <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 text-sm text-brand border-l-2 border-transparent hover:border-brand hover:bg-brand/5 hover:text-white transition-colors">
+                                                        <Settings className="h-4 w-4" /> Django Admin
+                                                    </a>
+                                                )}
+
                                                 <button onClick={() => setIsLoggedIn(false)} className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors">
                                                     <LogOut className="h-4 w-4" /> Log Out
                                                 </button>
