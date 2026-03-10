@@ -38,7 +38,7 @@ export default function App() {
         <Hero />
         <BookGrid books={books} setBooks={setBooks} searchQuery={searchQuery} />
         <ReviewForm setBooks={setBooks} isLoggedIn={isLoggedIn} onLoginRedirect={handleLoginRedirect} />
-        <RecentReviews />
+        <RecentReviews isLoggedIn={isLoggedIn} books={books} />
       </main>
 
       {/* Footer */}
