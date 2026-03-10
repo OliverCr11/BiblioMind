@@ -5,6 +5,8 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
     const [editingBook, setEditingBook] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+    const [detailBook, setDetailBook] = useState(null);
     const [bookIdToDelete, setBookIdToDelete] = useState(null);
     const [hoverRating, setHoverRating] = useState(0);
     const getAverageRating = (reviews) => {
@@ -102,6 +104,12 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
         );
     });
 
+    const handleDetailClick = (book, e) => {
+        e.stopPropagation();
+        setDetailBook(book);
+        setIsDetailModalOpen(true);
+    };
+
     return (
         <section id="featured-books" className="py-20 relative z-20 bg-background-zinc">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -167,9 +175,17 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                                                     <span className="ml-2 text-sm text-gray-300 font-bold">{avgRating > 0 ? avgRating.toFixed(1) : 'No reviews'}</span>
                                                 </div>
 
-                                                <p className="text-gray-300 text-sm leading-relaxed line-clamp-4 flex-grow mb-auto">
+                                                <p className="text-gray-300 text-sm leading-relaxed line-clamp-4 mb-2">
                                                     {book.description}
                                                 </p>
+                                                {book.description?.length > 150 && (
+                                                    <button
+                                                        onClick={(e) => handleDetailClick(book, e)}
+                                                        className="text-brand/80 hover:text-brand text-sm font-semibold transition-colors mt-auto text-left w-fit relative z-20"
+                                                    >
+                                                        Read Full Analysis
+                                                    </button>
+                                                )}
                                             </div>
 
                                             {isLoggedIn && book.owner_name === currentUser?.username && (
@@ -293,6 +309,65 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Glassmorphism Detail Read Modal */}
+            {isDetailModalOpen && detailBook && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsDetailModalOpen(false)}></div>
+
+                    <div className="relative w-[95%] sm:w-full max-w-3xl mx-auto bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-hidden glassmorphism animate-in fade-in zoom-in duration-300 flex flex-col max-h-[90vh]">
+                        {/* Glow Accent */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
+
+                        <div className="flex justify-between items-start p-6 border-b border-white/10 shrink-0">
+                            <div>
+                                <h3 className="text-3xl font-heading font-bold text-white mb-2">{detailBook.title}</h3>
+                                <p className="text-brand font-medium text-lg">{detailBook.author}</p>
+                            </div>
+                            <button onClick={() => setIsDetailModalOpen(false)} className="text-gray-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-2 rounded-full">
+                                <X className="h-6 w-6" />
+                            </button>
+                        </div>
+
+                        <div className="p-8 overflow-y-auto max-h-[70vh] custom-scrollbar">
+                            <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
+                                <div>
+                                    <p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">Curated By</p>
+                                    <p className="text-white font-medium flex items-center gap-2">
+                                        <div className="w-6 h-6 rounded-full bg-brand/20 flex items-center justify-center border border-brand/30">
+                                            <span className="text-xs text-brand">{detailBook.owner_name?.charAt(0) || 'S'}</span>
+                                        </div>
+                                        {detailBook.owner_name || 'System Catalog'}
+                                    </p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">Community Rating</p>
+                                    <div className="flex items-center gap-1 justify-end">
+                                        {[...Array(5)].map((_, i) => (
+                                            <Star
+                                                key={i}
+                                                className={`h-4 w-4 ${i < Math.floor(getAverageRating(detailBook.reviews)) ? 'text-brand fill-brand glow-primary' : 'text-gray-600'}`}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="prose prose-invert max-w-none">
+                                <p className="text-gray-300 text-lg leading-loose whitespace-pre-wrap">
+                                    {detailBook.description}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="p-6 border-t border-white/10 bg-black/20 shrink-0">
+                            <p className="text-xs text-gray-500 text-center font-medium font-heading">
+                                BiblioMind Archival Vault • {new Date().getFullYear()}
+                            </p>
+                        </div>
                     </div>
                 </div>
             )}
