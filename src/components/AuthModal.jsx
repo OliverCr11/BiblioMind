@@ -59,7 +59,7 @@ export default function AuthModal({ setIsAuthModalOpen, setIsLoggedIn, setCurren
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsAuthModalOpen(false)}></div>
 
-            <div className="relative w-full max-w-md bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-hidden glassmorphism animate-in fade-in zoom-in duration-300">
+            <div className="relative w-[95%] sm:w-full max-w-md mx-auto bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-hidden glassmorphism animate-in fade-in zoom-in duration-300">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
 
                 <div className="flex justify-between items-center p-6 border-b border-white/10 relative">

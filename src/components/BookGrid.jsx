@@ -118,16 +118,16 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                     </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 justify-items-center">
                     {filteredBooks.length === 0 ? (
-                        <div className="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-12 glassmorphism rounded-2xl">
+                        <div className="col-span-full text-center py-12 glassmorphism rounded-2xl w-full mx-a">
                             <p className="text-gray-400">No books found matching "{searchQuery}"</p>
                         </div>
                     ) : (
                         filteredBooks.map((book) => {
                             const avgRating = getAverageRating(book.reviews);
                             return (
-                                <div id={`book-${book.id}`} key={book.id} className="book-card h-[450px] w-full group cursor-pointer transition-all duration-500">
+                                <div id={`book-${book.id}`} key={book.id} className="book-card h-[450px] w-full max-w-[340px] group cursor-pointer transition-all duration-500">
                                     <div className="book-card-inner relative w-full h-full rounded-2xl shadow-2xl">
 
                                         {/* FRONT OF CARD */}
@@ -194,10 +194,10 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
 
             {/* Glassmorphism Edit Modal */}
             {isEditModalOpen && editingBook && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsEditModalOpen(false)}></div>
 
-                    <div className="relative w-full max-w-2xl bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-hidden glassmorphism animate-in fade-in zoom-in duration-300">
+                    <div className="relative w-[95%] sm:w-full max-w-2xl mx-auto bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-y-auto max-h-full glassmorphism animate-in fade-in zoom-in duration-300">
                         {/* Glow Accent */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
 
@@ -301,7 +301,7 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
             {isConfirmModalOpen && (
                 <div className="fixed inset-0 z-[110] flex items-center justify-center px-4">
                     <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setIsConfirmModalOpen(false)}></div>
-                    <div className="relative w-full max-w-sm bg-[#0a0a0c]/80 border border-brand/50 rounded-3xl p-8 shadow-[0_0_15px_rgba(168,85,247,0.3)] animate-in fade-in zoom-in duration-300 overflow-hidden glassmorphism">
+                    <div className="relative w-[95%] sm:w-full max-w-sm mx-auto bg-[#0a0a0c]/80 border border-brand/50 rounded-3xl p-6 sm:p-8 shadow-[0_0_15px_rgba(168,85,247,0.3)] animate-in fade-in zoom-in duration-300 overflow-hidden glassmorphism">
                         {/* Glow Accent */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
 

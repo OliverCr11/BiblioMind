@@ -29,8 +29,8 @@ export default function Hero() {
             </div>
 
             <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-4xl mx-auto">
-                    <h1 className="text-5xl md:text-7xl font-heading font-extrabold tracking-tight mb-8">
+                <div className="text-center max-w-4xl mx-auto px-2">
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-heading font-extrabold tracking-tight mb-6 md:mb-8 leading-tight">
                         Hello, <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand to-purple-300">Reader</span>.<br />
                         What are we reading today?
                     </h1>

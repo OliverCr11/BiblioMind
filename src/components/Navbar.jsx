@@ -65,12 +65,12 @@ export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn,
                 <div className="flex items-center justify-between h-20">
 
                     {/* Logo & Section Links */}
-                    <div className="flex items-center gap-8">
-                        <a href="#top" className="flex items-center gap-3 cursor-pointer group">
-                            <div className="w-10 h-10 rounded-xl bg-brand/20 flex items-center justify-center group-hover:glow-primary transition-all duration-300">
-                                <img src="/logo.png" alt="BiblioMind Logo" className="w-6 h-6 object-contain" />
+                    <div className="flex items-center gap-4 md:gap-8">
+                        <a href="#top" className="flex items-center gap-2 sm:gap-3 cursor-pointer group">
+                            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-brand/20 flex items-center justify-center group-hover:glow-primary transition-all duration-300">
+                                <img src="/logo.png" alt="BiblioMind Logo" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
                             </div>
-                            <span className="text-xl font-heading font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+                            <span className="text-lg sm:text-xl font-heading font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
                                 BiblioMind
                             </span>
                         </a>
