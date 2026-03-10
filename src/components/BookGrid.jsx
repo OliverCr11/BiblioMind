@@ -1,23 +1,33 @@
 import React, { useState } from 'react';
-import { Star, Edit2, Trash2, ChevronRight, X, Save } from 'lucide-react';
+import { Star, Edit2, Trash2, ChevronRight, X, Save, AlertTriangle } from 'lucide-react';
 
 export default function BookGrid({ books, setBooks, searchQuery = '' }) {
     const [editingBook, setEditingBook] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [bookToDelete, setBookToDelete] = useState(null);
     const getAverageRating = (reviews) => {
         if (!reviews || reviews.length === 0) return 0;
         const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
         return sum / reviews.length;
     };
 
-    const handleDelete = async (id, e) => {
+    const handleDeleteClick = (book, e) => {
         e.stopPropagation();
+        setBookToDelete(book);
+        setShowConfirmModal(true);
+    };
+
+    const executeDelete = async () => {
+        if (!bookToDelete) return;
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/books/${id}/`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/books/${bookToDelete.id}/`, {
                 method: 'DELETE',
             });
             if (response.ok) {
-                setBooks(prevBooks => prevBooks.filter(book => book.id !== id));
+                setBooks(prevBooks => prevBooks.filter(book => book.id !== bookToDelete.id));
+                setShowConfirmModal(false);
+                setBookToDelete(null);
             } else {
                 console.error('Failed to delete book');
             }
@@ -152,7 +162,7 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
                                                 <button onClick={(e) => handleEditClick(book, e)} className="flex-1 glassmorphism hover:bg-white/5 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all border border-white/10 hover:border-brand/50 hover:text-brand hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
                                                     <Edit2 className="h-4 w-4" /> Edit
                                                 </button>
-                                                <button onClick={(e) => handleDelete(book.id, e)} className="flex-1 glassmorphism hover:bg-red-500/10 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium text-red-400 hover:text-red-300 transition-all border border-white/10 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                                                <button onClick={(e) => handleDeleteClick(book, e)} className="flex-1 glassmorphism hover:bg-red-500/10 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium text-red-400 hover:text-red-300 transition-all border border-white/10 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]">
                                                     <Trash2 className="h-4 w-4" /> Delete
                                                 </button>
                                             </div>
@@ -244,6 +254,44 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Glassmorphism Confirm Delete Modal */}
+            {showConfirmModal && bookToDelete && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={() => setShowConfirmModal(false)}></div>
+
+                    <div className="relative w-full max-w-sm bg-background-pure/95 border border-red-500/30 rounded-3xl shadow-2xl overflow-hidden glassmorphism animate-in fade-in zoom-in duration-300">
+                        {/* Red Glow Accent */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
+
+                        <div className="p-8 text-center mt-2">
+                            <div className="mx-auto w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-5 border border-red-500/20 shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+                                <AlertTriangle className="h-8 w-8 text-red-400" />
+                            </div>
+                            <h3 className="text-xl font-heading font-bold text-white mb-2">Delete Book?</h3>
+                            <p className="text-sm text-gray-300 mb-2">
+                                Are you sure you want to delete <br /><span className="font-bold text-white italic">"{bookToDelete.title}"</span>?
+                            </p>
+                            <p className="text-xs text-red-400/80 mb-6">This action cannot be undone.</p>
+
+                            <div className="flex gap-3 mt-8">
+                                <button
+                                    onClick={() => setShowConfirmModal(false)}
+                                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:bg-white/5 transition-colors border border-white/10"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={executeDelete}
+                                    className="flex-1 bg-red-500/20 hover:bg-red-500/80 text-red-300 hover:text-white text-sm font-semibold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 border border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.2)] hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] transition-all"
+                                >
+                                    <Trash2 className="h-4 w-4" /> Delete
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
