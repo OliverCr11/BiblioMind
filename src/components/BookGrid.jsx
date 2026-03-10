@@ -4,6 +4,7 @@ import { Star, Edit2, Trash2, ChevronRight, X, Save } from 'lucide-react';
 export default function BookGrid({ books, setBooks, searchQuery = '' }) {
     const [editingBook, setEditingBook] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [hoverRating, setHoverRating] = useState(0);
     const getAverageRating = (reviews) => {
         if (!reviews || reviews.length === 0) return 0;
         const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
@@ -28,7 +29,9 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
 
     const handleEditClick = (book, e) => {
         e.stopPropagation();
-        setEditingBook({ ...book });
+        const currentRating = Math.round(getAverageRating(book.reviews));
+        setEditingBook({ ...book, rating: currentRating });
+        setHoverRating(0);
         setIsEditModalOpen(true);
     };
 
@@ -44,7 +47,8 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
                     title: editingBook.title,
                     author: editingBook.author,
                     description: editingBook.description,
-                    cover_url: editingBook.cover_url
+                    cover_url: editingBook.cover_url,
+                    rating: editingBook.rating
                 }),
             });
 
@@ -215,6 +219,29 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
                                     className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
                                     required
                                 />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-300 ml-1">Rating</label>
+                                <div className="flex items-center gap-2 bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 w-max">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <button
+                                            key={star}
+                                            type="button"
+                                            onMouseEnter={() => setHoverRating(star)}
+                                            onMouseLeave={() => setHoverRating(0)}
+                                            onClick={() => setEditingBook({ ...editingBook, rating: star })}
+                                            className="focus:outline-none focus:scale-110 transition-transform"
+                                        >
+                                            <Star
+                                                className={`h-6 w-6 transition-colors ${star <= (hoverRating || editingBook.rating)
+                                                    ? 'text-brand fill-brand glow-primary scale-110'
+                                                    : 'text-gray-600'
+                                                    }`}
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
 
                             <div className="space-y-2">
