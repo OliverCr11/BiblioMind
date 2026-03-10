@@ -135,7 +135,8 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
 
                                             <div className="relative z-10">
                                                 <h3 className="text-2xl font-heading font-bold mb-2 text-white">{book.title}</h3>
-                                                <p className="text-brand font-medium mb-4">{book.author}</p>
+                                                <p className="text-brand font-medium mb-1">{book.author}</p>
+                                                <p className="text-xs text-gray-400 font-medium mb-4">Added by: <span className="text-gray-300">{book.owner_name || 'System'}</span></p>
 
                                                 <div className="flex items-center gap-1 mb-6">
                                                     {[...Array(5)].map((_, i) => (

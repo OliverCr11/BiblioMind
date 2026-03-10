@@ -24,17 +24,21 @@ export default function ReviewForm({ setBooks, isLoggedIn, onLoginRedirect }) {
         };
 
         try {
+            const token = localStorage.getItem('token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers['Authorization'] = `Token ${token}`;
+            }
+
             const response = await fetch('http://127.0.0.1:8000/api/books/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers,
                 body: JSON.stringify(newBook),
             });
 
             if (response.ok) {
                 const createdBook = await response.json();
-                let finalBook = { ...createdBook, reviews: [], owner_name: 'Oliver C.' };
+                let finalBook = { ...createdBook, reviews: [] };
 
                 if (rating > 0) {
                     const reviewPayload = {

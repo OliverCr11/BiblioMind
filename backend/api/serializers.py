@@ -11,10 +11,11 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
+    owner_name = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
         model = Book
-        fields = ['id', 'title', 'author', 'description', 'cover_url', 'reviews']
+        fields = ['id', 'title', 'author', 'description', 'cover_url', 'owner_name', 'reviews']
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
