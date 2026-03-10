@@ -4,6 +4,8 @@ import { Star, Edit2, Trash2, ChevronRight, X, Save } from 'lucide-react';
 export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn, currentUser }) {
     const [editingBook, setEditingBook] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [bookIdToDelete, setBookIdToDelete] = useState(null);
     const [hoverRating, setHoverRating] = useState(0);
     const getAverageRating = (reviews) => {
         if (!reviews || reviews.length === 0) return 0;
@@ -11,14 +13,31 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
         return sum / reviews.length;
     };
 
-    const handleDelete = async (id, e) => {
+    const handleDelete = (id, e) => {
         e.stopPropagation();
+        setBookIdToDelete(id);
+        setIsConfirmModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!bookIdToDelete) return;
+
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/books/${id}/`, {
+            const token = localStorage.getItem('token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers['Authorization'] = `Token ${token}`;
+            }
+
+            const response = await fetch(`http://127.0.0.1:8000/api/books/${bookIdToDelete}/`, {
                 method: 'DELETE',
+                headers,
             });
+
             if (response.ok) {
-                setBooks(prevBooks => prevBooks.filter(book => book.id !== id));
+                setBooks(prevBooks => prevBooks.filter(book => book.id !== bookIdToDelete));
+                setIsConfirmModalOpen(false);
+                setBookIdToDelete(null);
             } else {
                 console.error('Failed to delete book');
             }
@@ -274,6 +293,35 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Glassmorphism Delete Confirmation Modal */}
+            {isConfirmModalOpen && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsConfirmModalOpen(false)}></div>
+                    <div className="relative w-full max-w-sm glassmorphism border border-white/10 rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in duration-300">
+                        <div className="w-12 h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mb-4 mx-auto glow-red">
+                            <Trash2 className="h-6 w-6" />
+                        </div>
+                        <h3 className="text-xl font-heading font-bold text-white mb-2 text-center">Delete Masterpiece?</h3>
+                        <p className="text-gray-400 text-sm mb-8 text-center px-4">This action cannot be undone. This title and all its scholarly reviews will be permanently removed.</p>
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setIsConfirmModalOpen(false)}
+                                className="flex-1 py-3 px-4 rounded-xl text-sm font-medium text-white glassmorphism hover:bg-white/5 border border-white/10 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmDelete}
+                                className="flex-1 py-3 px-4 rounded-xl text-sm font-medium text-white bg-red-500/80 hover:bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.5)] transition-all border border-red-500/50"
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
