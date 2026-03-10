@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, Edit2, Trash2, ChevronRight, X, Save } from 'lucide-react';
 
 export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn, currentUser }) {
@@ -14,6 +14,15 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
         const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
         return sum / reviews.length;
     };
+
+    useEffect(() => {
+        if (isEditModalOpen || isConfirmModalOpen || isDetailModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => { document.body.style.overflow = 'unset'; };
+    }, [isEditModalOpen, isConfirmModalOpen, isDetailModalOpen]);
 
     const handleDelete = (id, e) => {
         e.stopPropagation();
@@ -210,10 +219,10 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
 
             {/* Glassmorphism Edit Modal */}
             {isEditModalOpen && editingBook && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8">
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsEditModalOpen(false)}></div>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:p-6">
+                    <div className="absolute inset-0" onClick={() => setIsEditModalOpen(false)}></div>
 
-                    <div className="relative w-[95%] sm:w-full max-w-2xl mx-auto bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-y-auto max-h-full glassmorphism animate-in fade-in zoom-in duration-300">
+                    <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl glassmorphism animate-in fade-in zoom-in duration-300">
                         {/* Glow Accent */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
 
