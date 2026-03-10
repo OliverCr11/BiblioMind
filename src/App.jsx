@@ -64,7 +64,7 @@ export default function App() {
           currentUser={currentUser}
         />
         <ReviewForm setBooks={setBooks} isLoggedIn={isLoggedIn} onLoginRedirect={handleLoginRedirect} />
-        <RecentReviews isLoggedIn={isLoggedIn} books={books} />
+        <RecentReviews isLoggedIn={isLoggedIn} books={books} currentUser={currentUser} />
       </main>
 
       {isAuthModalOpen && (

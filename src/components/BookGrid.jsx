@@ -143,7 +143,7 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                                                 }}
                                             />
                                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 pt-20 rounded-b-2xl">
-                                                <h3 className="text-xl font-heading font-bold text-white mb-1 group-hover:text-brand transition-colors">{book.title}</h3>
+                                                <h3 className="text-xl font-heading font-bold text-white mb-1 group-hover:text-brand transition-colors line-clamp-2">{book.title}</h3>
                                                 <p className="text-gray-400 text-sm font-medium">{book.author}</p>
                                             </div>
                                         </div>
@@ -152,8 +152,8 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                                         <div className="book-card-back p-8 flex flex-col justify-between border border-white/10 glassmorphism rounded-2xl relative overflow-hidden">
                                             <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand/20 blur-3xl rounded-full"></div>
 
-                                            <div className="relative z-10">
-                                                <h3 className="text-2xl font-heading font-bold mb-2 text-white">{book.title}</h3>
+                                            <div className="relative z-10 flex flex-col h-full flex-grow">
+                                                <h3 className="text-2xl font-heading font-bold mb-2 text-white line-clamp-2 shrink-0">{book.title}</h3>
                                                 <p className="text-brand font-medium mb-1">{book.author}</p>
                                                 <p className="text-xs text-gray-400 font-medium mb-4">Added by: <span className="text-gray-300">{book.owner_name || 'System'}</span></p>
 
@@ -167,13 +167,13 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                                                     <span className="ml-2 text-sm text-gray-300 font-bold">{avgRating > 0 ? avgRating.toFixed(1) : 'No reviews'}</span>
                                                 </div>
 
-                                                <p className="text-gray-300 text-sm leading-relaxed line-clamp-6">
+                                                <p className="text-gray-300 text-sm leading-relaxed line-clamp-4 flex-grow mb-auto">
                                                     {book.description}
                                                 </p>
                                             </div>
 
                                             {isLoggedIn && book.owner_name === currentUser?.username && (
-                                                <div className="flex gap-3 mt-6 relative z-10">
+                                                <div className="flex gap-3 mt-6 relative z-10 shrink-0">
                                                     <button onClick={(e) => handleEditClick(book, e)} className="flex-1 glassmorphism hover:bg-white/5 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all border border-white/10 hover:border-brand/50 hover:text-brand hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
                                                         <Edit2 className="h-4 w-4" /> Edit
                                                     </button>
