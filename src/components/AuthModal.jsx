@@ -34,11 +34,13 @@ export default function AuthModal({ setIsAuthModalOpen, setIsLoggedIn, setCurren
 
             if (response.ok) {
                 if (isLoginTab) {
-                    localStorage.setItem('token', data.token);
-                    setCurrentUser({
+                    const userData = {
                         username: data.username,
                         is_staff: data.is_staff
-                    });
+                    };
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user_data', JSON.stringify(userData));
+                    setCurrentUser(userData);
                     setIsLoggedIn(true);
                     setIsAuthModalOpen(false);
                 } else {

@@ -20,6 +20,21 @@ export default function App() {
   };
 
   useEffect(() => {
+    // Check for existing session
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user_data');
+
+    if (token && userData) {
+      try {
+        setCurrentUser(JSON.parse(userData));
+        setIsLoggedIn(true);
+      } catch (e) {
+        console.error("Failed to parse user data from local storage", e);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user_data');
+      }
+    }
+
     fetch('http://127.0.0.1:8000/api/books/')
       .then(res => res.json())
       .then(data => setBooks(data))

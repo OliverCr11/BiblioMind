@@ -197,7 +197,14 @@ export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn,
                                                     </a>
                                                 )}
 
-                                                <button onClick={() => setIsLoggedIn(false)} className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors">
+                                                <button
+                                                    onClick={() => {
+                                                        localStorage.removeItem('token');
+                                                        localStorage.removeItem('user_data');
+                                                        setIsLoggedIn(false);
+                                                    }}
+                                                    className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                                                >
                                                     <LogOut className="h-4 w-4" /> Log Out
                                                 </button>
                                             </div>
