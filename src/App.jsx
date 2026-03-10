@@ -11,6 +11,9 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
 
+  // Mock current user to test ownership authorization for CRUD actions
+  const currentUser = { username: 'Oliver C.' };
+
   const handleLoginRedirect = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsUserOpen(true);
@@ -36,7 +39,13 @@ export default function App() {
       />
       <main>
         <Hero />
-        <BookGrid books={books} setBooks={setBooks} searchQuery={searchQuery} />
+        <BookGrid
+          books={books}
+          setBooks={setBooks}
+          searchQuery={searchQuery}
+          isLoggedIn={isLoggedIn}
+          currentUser={currentUser}
+        />
         <ReviewForm setBooks={setBooks} isLoggedIn={isLoggedIn} onLoginRedirect={handleLoginRedirect} />
         <RecentReviews isLoggedIn={isLoggedIn} books={books} />
       </main>

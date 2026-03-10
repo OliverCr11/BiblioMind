@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Star, Edit2, Trash2, ChevronRight, X, Save } from 'lucide-react';
 
-export default function BookGrid({ books, setBooks, searchQuery = '' }) {
+export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn, currentUser }) {
     const [editingBook, setEditingBook] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [hoverRating, setHoverRating] = useState(0);
@@ -152,14 +152,16 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
                                                 </p>
                                             </div>
 
-                                            <div className="flex gap-3 mt-6 relative z-10">
-                                                <button onClick={(e) => handleEditClick(book, e)} className="flex-1 glassmorphism hover:bg-white/5 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all border border-white/10 hover:border-brand/50 hover:text-brand hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
-                                                    <Edit2 className="h-4 w-4" /> Edit
-                                                </button>
-                                                <button onClick={(e) => handleDelete(book.id, e)} className="flex-1 glassmorphism hover:bg-red-500/10 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium text-red-400 hover:text-red-300 transition-all border border-white/10 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]">
-                                                    <Trash2 className="h-4 w-4" /> Delete
-                                                </button>
-                                            </div>
+                                            {isLoggedIn && book.owner_name === currentUser?.username && (
+                                                <div className="flex gap-3 mt-6 relative z-10">
+                                                    <button onClick={(e) => handleEditClick(book, e)} className="flex-1 glassmorphism hover:bg-white/5 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all border border-white/10 hover:border-brand/50 hover:text-brand hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                                                        <Edit2 className="h-4 w-4" /> Edit
+                                                    </button>
+                                                    <button onClick={(e) => handleDelete(book.id, e)} className="flex-1 glassmorphism hover:bg-red-500/10 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium text-red-400 hover:text-red-300 transition-all border border-white/10 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                                                        <Trash2 className="h-4 w-4" /> Delete
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
 
                                     </div>

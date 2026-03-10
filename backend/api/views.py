@@ -1,10 +1,11 @@
 import requests
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
 from django.db.models import Avg
 from .models import Book, Review
-from .serializers import BookSerializer, ReviewSerializer
+from .serializers import BookSerializer, ReviewSerializer, UserSerializer
 
 @api_view(['GET'])
 def get_stats(request):
@@ -18,6 +19,10 @@ def get_stats(request):
         'total_reviews': total_reviews,
         'average_rating': avg_rating
     })
+
+class RegisterView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()

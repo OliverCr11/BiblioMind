@@ -34,7 +34,7 @@ export default function ReviewForm({ setBooks, isLoggedIn, onLoginRedirect }) {
 
             if (response.ok) {
                 const createdBook = await response.json();
-                let finalBook = { ...createdBook, reviews: [] };
+                let finalBook = { ...createdBook, reviews: [], owner_name: 'Oliver C.' };
 
                 if (rating > 0) {
                     const reviewPayload = {
