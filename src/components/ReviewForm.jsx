@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Star, Send } from 'lucide-react';
+import { Star, Send, Lock } from 'lucide-react';
 
-export default function ReviewForm({ setBooks }) {
+export default function ReviewForm({ setBooks, isLoggedIn }) {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [description, setDescription] = useState('');
@@ -88,73 +88,89 @@ export default function ReviewForm({ setBooks }) {
                         <p className="text-gray-400">Share your analytical insights with the community.</p>
                     </div>
 
-                    <form className="space-y-6" onSubmit={handleSubmit}>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {!isLoggedIn ? (
+                        <div className="py-12 text-center h-full flex flex-col items-center justify-center">
+                            <div className="w-16 h-16 rounded-2xl bg-brand/10 flex items-center justify-center mb-6 mx-auto">
+                                <Lock className="h-8 w-8 text-brand" />
+                            </div>
+                            <h3 className="text-2xl font-heading font-bold text-white mb-2">Authentication Required</h3>
+                            <p className="text-gray-400 max-w-md mx-auto mb-8">
+                                Please Log In to share your thoughts, publish a review, and engage with the community's literary analysis.
+                            </p>
+                            <button className="bg-brand/10 border border-brand/30 text-brand px-8 py-3 rounded-xl font-medium cursor-not-allowed opacity-70">
+                                Log In via Top Menu
+                            </button>
+                        </div>
+                    ) : (
+                        <form className="space-y-6" onSubmit={handleSubmit}>
+                            {/* Form Input Groups */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300 ml-1">Book Title</label>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
+                                        placeholder="The Midnight Library"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300 ml-1">Author</label>
+                                    <input
+                                        type="text"
+                                        value={author}
+                                        onChange={(e) => setAuthor(e.target.value)}
+                                        className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
+                                        placeholder="Matt Haig"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 ml-1">Book Title</label>
-                                <input
-                                    type="text"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
-                                    placeholder="The Midnight Library"
-                                    required
-                                />
+                                <label className="text-sm font-medium text-gray-300 ml-1">Rating</label>
+                                <div className="flex items-center gap-2 bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 w-max">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <button
+                                            key={star}
+                                            type="button"
+                                            onMouseEnter={() => setHoverRating(star)}
+                                            onMouseLeave={() => setHoverRating(0)}
+                                            onClick={() => setRating(star)}
+                                            className="focus:outline-none focus:scale-110 transition-transform"
+                                        >
+                                            <Star
+                                                className={`h-6 w-6 transition-colors ${star <= (hoverRating || rating)
+                                                    ? 'text-brand fill-brand glow-primary scale-110'
+                                                    : 'text-gray-600'
+                                                    }`}
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
+
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 ml-1">Author</label>
-                                <input
-                                    type="text"
-                                    value={author}
-                                    onChange={(e) => setAuthor(e.target.value)}
-                                    className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
-                                    placeholder="Matt Haig"
-                                    required
-                                />
+                                <label className="text-sm font-medium text-gray-300 ml-1">Analysis / Review</label>
+                                <textarea
+                                    rows={5}
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all resize-none"
+                                    placeholder="Dive deep into the narrative structure, thematic elements, and character development..."
+                                ></textarea>
                             </div>
-                        </div>
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300 ml-1">Rating</label>
-                            <div className="flex items-center gap-2 bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 w-max">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <button
-                                        key={star}
-                                        type="button"
-                                        onMouseEnter={() => setHoverRating(star)}
-                                        onMouseLeave={() => setHoverRating(0)}
-                                        onClick={() => setRating(star)}
-                                        className="focus:outline-none focus:scale-110 transition-transform"
-                                    >
-                                        <Star
-                                            className={`h-6 w-6 transition-colors ${star <= (hoverRating || rating)
-                                                ? 'text-brand fill-brand glow-primary scale-110'
-                                                : 'text-gray-600'
-                                                }`}
-                                        />
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300 ml-1">Analysis / Review</label>
-                            <textarea
-                                rows={5}
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all resize-none"
-                                placeholder="Dive deep into the narrative structure, thematic elements, and character development..."
-                            ></textarea>
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="w-full bg-brand hover:bg-brand/90 text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all hover:-translate-y-1"
-                        >
-                            <Send className="h-5 w-5" /> Publish Review
-                        </button>
-                    </form>
+                            <button
+                                type="submit"
+                                className="w-full bg-brand hover:bg-brand/90 text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all hover:-translate-y-1"
+                            >
+                                <Send className="h-5 w-5" /> Publish Review
+                            </button>
+                        </form>
+                    )}
                 </div>
             </div>
         </section>

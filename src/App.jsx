@@ -8,6 +8,7 @@ import RecentReviews from './components/RecentReviews';
 export default function App() {
   const [books, setBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/books/')
@@ -18,11 +19,17 @@ export default function App() {
 
   return (
     <div id="top" className="min-h-screen selection:bg-brand selection:text-white bg-background-pure">
-      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} books={books} />
+      <Navbar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        books={books}
+        isLoggedIn={isLoggedIn}
+        setIsLoggedIn={setIsLoggedIn}
+      />
       <main>
         <Hero />
         <BookGrid books={books} setBooks={setBooks} searchQuery={searchQuery} />
-        <ReviewForm setBooks={setBooks} />
+        <ReviewForm setBooks={setBooks} isLoggedIn={isLoggedIn} />
         <RecentReviews />
       </main>
 

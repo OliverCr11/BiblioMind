@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BookOpen, Search, User, Bell, LogOut, Settings } from 'lucide-react';
 
-export default function Navbar({ searchQuery, setSearchQuery, books }) {
+export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn, setIsLoggedIn }) {
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const [isUserOpen, setIsUserOpen] = useState(false);
     const notifRef = useRef(null);
@@ -180,19 +180,39 @@ export default function Navbar({ searchQuery, setSearchQuery, books }) {
 
                             {isUserOpen && (
                                 <div className="absolute right-0 mt-2 w-56 rounded-2xl glassmorphism border border-white/10 shadow-2xl py-2 z-50 transform origin-top-right transition-all">
-                                    <div className="px-4 py-3 border-b border-white/5">
-                                        <p className="text-sm font-medium text-white">Oliver C.</p>
-                                        <p className="text-xs text-gray-400 truncate">oliver@bibliomind.test</p>
-                                    </div>
+                                    {isLoggedIn ? (
+                                        <>
+                                            <div className="px-4 py-3 border-b border-white/5">
+                                                <p className="text-sm font-medium text-white">Oliver C.</p>
+                                                <p className="text-xs text-gray-400 truncate">oliver@bibliomind.test</p>
+                                            </div>
 
-                                    <div className="py-1">
-                                        <a href="#" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                                            <User className="h-4 w-4 text-brand" /> My Profile <span className="text-[10px] text-brand bg-brand/10 px-1.5 py-0.5 rounded-full ml-auto">Soon</span>
-                                        </a>
-                                        <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
-                                            <Settings className="h-4 w-4 text-gray-400" /> Django Admin
-                                        </a>
-                                    </div>
+                                            <div className="py-1">
+                                                <a href="#" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+                                                    <User className="h-4 w-4 text-brand" /> My Profile <span className="text-[10px] text-brand bg-brand/10 px-1.5 py-0.5 rounded-full ml-auto">Soon</span>
+                                                </a>
+                                                <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+                                                    <Settings className="h-4 w-4 text-gray-400" /> Django Admin
+                                                </a>
+                                                <button onClick={() => setIsLoggedIn(false)} className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors">
+                                                    <LogOut className="h-4 w-4" /> Log Out
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="px-4 py-3 border-b border-white/5">
+                                                <p className="text-sm font-medium text-gray-400">Guest User</p>
+                                                <p className="text-xs text-brand font-medium truncate">Not logged in</p>
+                                            </div>
+
+                                            <div className="py-2 px-4">
+                                                <button onClick={() => setIsLoggedIn(true)} className="w-full bg-brand/10 hover:bg-brand text-brand hover:text-white border border-brand/30 hover:border-brand text-sm font-semibold py-2 rounded-xl transition-all shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                                                    Log In to BiblioMind
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
