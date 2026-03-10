@@ -1,7 +1,9 @@
-import React from 'react';
-import { Star, Edit2, Trash2, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star, Edit2, Trash2, ChevronRight, X, Save } from 'lucide-react';
 
 export default function BookGrid({ books, setBooks, searchQuery = '' }) {
+    const [editingBook, setEditingBook] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const getAverageRating = (reviews) => {
         if (!reviews || reviews.length === 0) return 0;
         const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
@@ -21,6 +23,51 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
             }
         } catch (error) {
             console.error('Error deleting book:', error);
+        }
+    };
+
+    const handleEditClick = (book, e) => {
+        e.stopPropagation();
+        setEditingBook({ ...book });
+        setIsEditModalOpen(true);
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/books/${editingBook.id}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: editingBook.title,
+                    author: editingBook.author,
+                    description: editingBook.description,
+                    cover_url: editingBook.cover_url
+                }),
+            });
+
+            if (response.ok) {
+                const updatedBook = await response.json();
+
+                // Keep the reviews array intact since PATCH to Book won't return nested Review data directly
+                const bookWithReviews = {
+                    ...updatedBook,
+                    reviews: editingBook.reviews
+                };
+
+                // Update the state inline without refreshing via map replace
+                setBooks(prevBooks => prevBooks.map(book =>
+                    book.id === updatedBook.id ? bookWithReviews : book
+                ));
+                setIsEditModalOpen(false);
+                setEditingBook(null);
+            } else {
+                console.error('Failed to update book');
+            }
+        } catch (error) {
+            console.error('Error updating book:', error);
         }
     };
 
@@ -102,10 +149,10 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
                                             </div>
 
                                             <div className="flex gap-3 mt-6 relative z-10">
-                                                <button className="flex-1 glassmorphism hover:bg-white/5 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-colors border border-white/10 hover:border-brand/50 hover:text-brand">
+                                                <button onClick={(e) => handleEditClick(book, e)} className="flex-1 glassmorphism hover:bg-white/5 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all border border-white/10 hover:border-brand/50 hover:text-brand hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
                                                     <Edit2 className="h-4 w-4" /> Edit
                                                 </button>
-                                                <button onClick={(e) => handleDelete(book.id, e)} className="flex-1 glassmorphism hover:bg-red-500/10 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium text-red-400 hover:text-red-300 transition-colors border border-white/10 hover:border-red-500/50">
+                                                <button onClick={(e) => handleDelete(book.id, e)} className="flex-1 glassmorphism hover:bg-red-500/10 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium text-red-400 hover:text-red-300 transition-all border border-white/10 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]">
                                                     <Trash2 className="h-4 w-4" /> Delete
                                                 </button>
                                             </div>
@@ -118,6 +165,88 @@ export default function BookGrid({ books, setBooks, searchQuery = '' }) {
                     )}
                 </div>
             </div>
+
+            {/* Glassmorphism Edit Modal */}
+            {isEditModalOpen && editingBook && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsEditModalOpen(false)}></div>
+
+                    <div className="relative w-full max-w-2xl bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-hidden glassmorphism animate-in fade-in zoom-in duration-300">
+                        {/* Glow Accent */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
+
+                        <div className="flex justify-between items-center p-6 border-b border-white/10">
+                            <h3 className="text-2xl font-heading font-bold text-white">Edit Book Profile</h3>
+                            <button onClick={() => setIsEditModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+                                <X className="h-6 w-6" />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleUpdate} className="p-6 space-y-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300 ml-1">Title</label>
+                                    <input
+                                        type="text"
+                                        value={editingBook.title}
+                                        onChange={(e) => setEditingBook({ ...editingBook, title: e.target.value })}
+                                        className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300 ml-1">Author</label>
+                                    <input
+                                        type="text"
+                                        value={editingBook.author}
+                                        onChange={(e) => setEditingBook({ ...editingBook, author: e.target.value })}
+                                        className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-300 ml-1">Cover URL</label>
+                                <input
+                                    type="url"
+                                    value={editingBook.cover_url}
+                                    onChange={(e) => setEditingBook({ ...editingBook, cover_url: e.target.value })}
+                                    className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
+                                    required
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-300 ml-1">Analysis / Description</label>
+                                <textarea
+                                    rows={4}
+                                    value={editingBook.description}
+                                    onChange={(e) => setEditingBook({ ...editingBook, description: e.target.value })}
+                                    className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all resize-none"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div className="pt-4 flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditModalOpen(false)}
+                                    className="px-6 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:bg-white/5 transition-colors border border-transparent"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="bg-brand hover:bg-brand/90 text-white text-sm font-semibold px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all hover:-translate-y-0.5"
+                                >
+                                    <Save className="h-4 w-4" /> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </section>
     );
 }
