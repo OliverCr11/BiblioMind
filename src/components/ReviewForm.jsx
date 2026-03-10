@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Star, Send, Lock } from 'lucide-react';
 
-export default function ReviewForm({ setBooks, isLoggedIn }) {
+export default function ReviewForm({ setBooks, isLoggedIn, onLoginRedirect }) {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [description, setDescription] = useState('');
@@ -97,7 +97,10 @@ export default function ReviewForm({ setBooks, isLoggedIn }) {
                             <p className="text-gray-400 max-w-md mx-auto mb-8">
                                 Please Log In to share your thoughts, publish a review, and engage with the community's literary analysis.
                             </p>
-                            <button className="bg-brand/10 border border-brand/30 text-brand px-8 py-3 rounded-xl font-medium cursor-not-allowed opacity-70">
+                            <button
+                                onClick={onLoginRedirect}
+                                className="bg-brand/10 hover:bg-brand/20 border border-brand/30 text-brand px-8 py-3 rounded-xl font-medium transition-colors hover:shadow-[0_0_15px_rgba(168,85,247,0.2)]"
+                            >
                                 Log In via Top Menu
                             </button>
                         </div>

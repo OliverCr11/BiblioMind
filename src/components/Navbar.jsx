@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BookOpen, Search, User, Bell, LogOut, Settings } from 'lucide-react';
 
-export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn, setIsLoggedIn }) {
+export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn, setIsLoggedIn, isUserOpen, setIsUserOpen }) {
     const [isNotifOpen, setIsNotifOpen] = useState(false);
-    const [isUserOpen, setIsUserOpen] = useState(false);
     const notifRef = useRef(null);
     const userRef = useRef(null);
 

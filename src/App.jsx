@@ -9,6 +9,12 @@ export default function App() {
   const [books, setBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isUserOpen, setIsUserOpen] = useState(false);
+
+  const handleLoginRedirect = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsUserOpen(true);
+  };
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/books/')
@@ -25,11 +31,13 @@ export default function App() {
         books={books}
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
+        isUserOpen={isUserOpen}
+        setIsUserOpen={setIsUserOpen}
       />
       <main>
         <Hero />
         <BookGrid books={books} setBooks={setBooks} searchQuery={searchQuery} />
-        <ReviewForm setBooks={setBooks} isLoggedIn={isLoggedIn} />
+        <ReviewForm setBooks={setBooks} isLoggedIn={isLoggedIn} onLoginRedirect={handleLoginRedirect} />
         <RecentReviews />
       </main>
 
