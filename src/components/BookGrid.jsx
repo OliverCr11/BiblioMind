@@ -300,24 +300,27 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
             {/* Glassmorphism Delete Confirmation Modal */}
             {isConfirmModalOpen && (
                 <div className="fixed inset-0 z-[110] flex items-center justify-center px-4">
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsConfirmModalOpen(false)}></div>
-                    <div className="relative w-full max-w-sm glassmorphism border border-white/10 rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in duration-300">
-                        <div className="w-12 h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mb-4 mx-auto glow-red">
-                            <Trash2 className="h-6 w-6" />
-                        </div>
-                        <h3 className="text-xl font-heading font-bold text-white mb-2 text-center">Delete Masterpiece?</h3>
-                        <p className="text-gray-400 text-sm mb-8 text-center px-4">This action cannot be undone. This title and all its scholarly reviews will be permanently removed.</p>
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setIsConfirmModalOpen(false)}></div>
+                    <div className="relative w-full max-w-sm bg-[#0a0a0c]/80 border border-brand/50 rounded-3xl p-8 shadow-[0_0_15px_rgba(168,85,247,0.3)] animate-in fade-in zoom-in duration-300 overflow-hidden glassmorphism">
+                        {/* Glow Accent */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
 
-                        <div className="flex gap-3">
+                        <div className="w-14 h-14 rounded-2xl bg-brand/10 border border-brand/30 text-brand flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+                            <Trash2 className="h-7 w-7" />
+                        </div>
+                        <h3 className="text-2xl font-heading font-bold text-white mb-3 text-center">Delete Masterpiece?</h3>
+                        <p className="text-gray-300 text-sm mb-8 text-center leading-relaxed">This action cannot be undone. This title and all its scholarly reviews will be permanently removed.</p>
+
+                        <div className="flex gap-4">
                             <button
                                 onClick={() => setIsConfirmModalOpen(false)}
-                                className="flex-1 py-3 px-4 rounded-xl text-sm font-medium text-white glassmorphism hover:bg-white/5 border border-white/10 transition-colors"
+                                className="flex-1 py-3 px-4 rounded-xl text-sm font-medium text-gray-400 bg-transparent border border-white/10 hover:border-brand/40 hover:text-white transition-all shadow-none"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={confirmDelete}
-                                className="flex-1 py-3 px-4 rounded-xl text-sm font-medium text-white bg-red-500/80 hover:bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.5)] transition-all border border-red-500/50"
+                                className="flex-1 py-3 px-4 rounded-xl text-sm font-bold text-white bg-brand hover:bg-brand/90 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all hover:-translate-y-0.5 border-none"
                             >
                                 Delete
                             </button>
