@@ -219,102 +219,102 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
 
             {/* Glassmorphism Edit Modal */}
             {isEditModalOpen && editingBook && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 sm:p-6">
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm pt-28 pb-8 px-4">
                     <div className="absolute inset-0" onClick={() => setIsEditModalOpen(false)}></div>
 
-                    <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl glassmorphism animate-in fade-in zoom-in duration-300">
+                    <div className="w-full max-w-2xl bg-[#111] border border-purple-500 rounded-2xl flex flex-col max-h-full overflow-hidden shadow-[0_0_15px_rgba(168,85,247,0.3)] glassmorphism animate-in fade-in zoom-in duration-300">
                         {/* Glow Accent */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
 
-                        <div className="flex justify-between items-center p-6 border-b border-white/10">
-                            <h3 className="text-2xl font-heading font-bold text-white">Edit Book Profile</h3>
-                            <button onClick={() => setIsEditModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
-                                <X className="h-6 w-6" />
-                            </button>
+                        <div className="relative flex flex-col items-center p-6 shrink-0 border-b border-white/5">
+                            <div className="w-12 h-12 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-4 border border-brand/20 shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+                                <Edit2 className="h-6 w-6" />
+                            </div>
+                            <h3 className="text-2xl font-heading font-bold text-white tracking-wide">Modify Masterpiece Details</h3>
                         </div>
 
-                        <form onSubmit={handleUpdate} className="p-6 space-y-5">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300 ml-1">Title</label>
+                        <form onSubmit={handleUpdate} className="flex-1 overflow-hidden flex flex-col text-left">
+                            <div className="p-6 overflow-y-auto flex flex-col gap-4 custom-scrollbar">
+                                <div className="space-y-1">
+                                    <label className="block text-xs font-medium text-gray-400">Book Title</label>
                                     <input
                                         type="text"
                                         value={editingBook.title}
                                         onChange={(e) => setEditingBook({ ...editingBook, title: e.target.value })}
-                                        className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
+                                        className="w-full bg-[#18181b]/80 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-brand/50 focus:border-brand transition-all"
                                         required
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300 ml-1">Author</label>
+
+                                <div className="space-y-1">
+                                    <label className="block text-xs font-medium text-gray-400">Author</label>
                                     <input
                                         type="text"
                                         value={editingBook.author}
                                         onChange={(e) => setEditingBook({ ...editingBook, author: e.target.value })}
-                                        className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
+                                        className="w-full bg-[#18181b]/80 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-brand/50 focus:border-brand transition-all"
                                         required
                                     />
                                 </div>
-                            </div>
 
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 ml-1">Cover URL</label>
-                                <input
-                                    type="url"
-                                    value={editingBook.cover_url}
-                                    onChange={(e) => setEditingBook({ ...editingBook, cover_url: e.target.value })}
-                                    className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all"
-                                    required
-                                />
-                            </div>
+                                <div className="space-y-1">
+                                    <label className="block text-xs font-medium text-gray-400">Analysis / Description</label>
+                                    <textarea
+                                        rows={4}
+                                        value={editingBook.description}
+                                        onChange={(e) => setEditingBook({ ...editingBook, description: e.target.value })}
+                                        className="w-full bg-[#18181b]/80 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-brand/50 focus:border-brand transition-all resize-none overflow-y-auto custom-scrollbar"
+                                        required
+                                    />
+                                </div>
 
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 ml-1">Rating</label>
-                                <div className="flex items-center gap-2 bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 w-max">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <button
-                                            key={star}
-                                            type="button"
-                                            onMouseEnter={() => setHoverRating(star)}
-                                            onMouseLeave={() => setHoverRating(0)}
-                                            onClick={() => setEditingBook({ ...editingBook, rating: star })}
-                                            className="focus:outline-none focus:scale-110 transition-transform"
-                                        >
-                                            <Star
-                                                className={`h-6 w-6 transition-colors ${star <= (hoverRating || editingBook.rating)
-                                                    ? 'text-brand fill-brand glow-primary scale-110'
-                                                    : 'text-gray-600'
-                                                    }`}
-                                            />
-                                        </button>
-                                    ))}
+                                <div className="space-y-1">
+                                    <label className="block text-xs font-medium text-gray-400">Cover Image URL</label>
+                                    <input
+                                        type="text"
+                                        value={editingBook.cover_url}
+                                        onChange={(e) => setEditingBook({ ...editingBook, cover_url: e.target.value })}
+                                        className="w-full bg-[#18181b]/80 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-400 placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-brand/50 focus:border-brand transition-all font-mono"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2 flex flex-col items-center mt-2">
+                                    <label className="block text-xs font-medium text-gray-400">Star Rating</label>
+                                    <div className="flex items-center gap-1.5 w-fit">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <button
+                                                key={star}
+                                                type="button"
+                                                onMouseEnter={() => setHoverRating(star)}
+                                                onMouseLeave={() => setHoverRating(0)}
+                                                onClick={() => setEditingBook({ ...editingBook, rating: star })}
+                                                className="focus:outline-none focus:scale-110 transition-transform"
+                                            >
+                                                <Star
+                                                    className={`h-5 w-5 transition-colors ${star <= (hoverRating || editingBook.rating)
+                                                        ? 'text-brand fill-brand glow-primary scale-110'
+                                                        : 'text-gray-600/50'
+                                                        }`}
+                                                />
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 ml-1">Analysis / Description</label>
-                                <textarea
-                                    rows={4}
-                                    value={editingBook.description}
-                                    onChange={(e) => setEditingBook({ ...editingBook, description: e.target.value })}
-                                    className="w-full bg-background-zinc/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand/50 focus:border-brand transition-all resize-none"
-                                    required
-                                ></textarea>
-                            </div>
-
-                            <div className="pt-4 flex justify-end gap-3">
+                            <div className="p-6 shrink-0 border-t border-white/5 flex justify-between gap-4 bg-[#0F0F13]/95">
                                 <button
                                     type="button"
                                     onClick={() => setIsEditModalOpen(false)}
-                                    className="px-6 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:bg-white/5 transition-colors border border-transparent"
+                                    className="flex-1 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white border border-white/10 hover:bg-white/5 transition-colors tracking-wide"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="bg-brand hover:bg-brand/90 text-white text-sm font-semibold px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all hover:-translate-y-0.5"
+                                    className="flex-1 bg-brand hover:bg-brand/90 text-white text-sm font-bold py-2.5 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] transition-all tracking-wide"
                                 >
-                                    <Save className="h-4 w-4" /> Save Changes
+                                    Save Changes
                                 </button>
                             </div>
                         </form>
@@ -323,95 +323,99 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
             )}
 
             {/* Glassmorphism Detail Read Modal */}
-            {isDetailModalOpen && detailBook && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8">
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsDetailModalOpen(false)}></div>
+            {
+                isDetailModalOpen && detailBook && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-6 sm:p-12 md:p-24">
+                        <div className="absolute inset-0" onClick={() => setIsDetailModalOpen(false)}></div>
 
-                    <div className="relative w-[95%] sm:w-full max-w-3xl mx-auto bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-hidden glassmorphism animate-in fade-in zoom-in duration-300 flex flex-col max-h-[90vh]">
-                        {/* Glow Accent */}
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
+                        <div className="relative w-full max-w-3xl max-h-full mx-auto bg-background-pure/95 border border-white/10 rounded-3xl shadow-2xl overflow-hidden glassmorphism animate-in fade-in zoom-in duration-300 flex flex-col">
+                            {/* Glow Accent */}
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
 
-                        <div className="flex justify-between items-start p-6 border-b border-white/10 shrink-0">
-                            <div>
-                                <h3 className="text-3xl font-heading font-bold text-white mb-2">{detailBook.title}</h3>
-                                <p className="text-brand font-medium text-lg">{detailBook.author}</p>
+                            <div className="relative flex flex-col items-center justify-center p-8 border-b border-white/10 shrink-0 text-center">
+                                <h3 className="text-4xl font-heading font-bold text-white mb-2">{detailBook.title}</h3>
+                                <p className="text-brand font-medium text-lg uppercase tracking-widest">{detailBook.author}</p>
+
+                                <button onClick={() => setIsDetailModalOpen(false)} className="absolute top-8 right-8 text-gray-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-2 rounded-full">
+                                    <X className="h-6 w-6" />
+                                </button>
                             </div>
-                            <button onClick={() => setIsDetailModalOpen(false)} className="text-gray-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-2 rounded-full">
-                                <X className="h-6 w-6" />
-                            </button>
-                        </div>
 
-                        <div className="p-8 overflow-y-auto max-h-[70vh] custom-scrollbar">
-                            <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                <div>
-                                    <p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">Curated By</p>
-                                    <p className="text-white font-medium flex items-center gap-2">
-                                        <div className="w-6 h-6 rounded-full bg-brand/20 flex items-center justify-center border border-brand/30">
-                                            <span className="text-xs text-brand">{detailBook.owner_name?.charAt(0) || 'S'}</span>
+                            <div className="p-8 overflow-y-auto custom-scrollbar flex-grow text-center">
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-10 border-b border-white/5 pb-8">
+                                    <div className="text-center">
+                                        <p className="text-xs text-gray-400 font-bold mb-2 uppercase tracking-widest">Curated By</p>
+                                        <div className="flex flex-col items-center gap-2">
+                                            <div className="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center border border-brand/30 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                                                <span className="text-sm text-brand font-bold">{detailBook.owner_name?.charAt(0) || 'S'}</span>
+                                            </div>
+                                            <p className="text-white font-medium">{detailBook.owner_name || 'System Catalog'}</p>
                                         </div>
-                                        {detailBook.owner_name || 'System Catalog'}
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-xs text-gray-400 font-medium mb-1 uppercase tracking-wider">Community Rating</p>
-                                    <div className="flex items-center gap-1 justify-end">
-                                        {[...Array(5)].map((_, i) => (
-                                            <Star
-                                                key={i}
-                                                className={`h-4 w-4 ${i < Math.floor(getAverageRating(detailBook.reviews)) ? 'text-brand fill-brand glow-primary' : 'text-gray-600'}`}
-                                            />
-                                        ))}
+                                    </div>
+                                    <div className="hidden sm:block w-px h-16 bg-white/10"></div>
+                                    <div className="text-center">
+                                        <p className="text-xs text-gray-400 font-bold mb-3 uppercase tracking-widest">Community Rating</p>
+                                        <div className="flex items-center justify-center gap-1.5 bg-background-zinc/50 px-4 py-2 rounded-xl border border-white/5">
+                                            {[...Array(5)].map((_, i) => (
+                                                <Star
+                                                    key={i}
+                                                    className={`h-5 w-5 ${i < Math.floor(getAverageRating(detailBook.reviews)) ? 'text-brand fill-brand glow-primary' : 'text-gray-600'}`}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div className="prose prose-invert max-w-none mx-auto">
+                                    <p className="text-gray-300 text-lg leading-loose whitespace-pre-wrap text-center">
+                                        {detailBook.description}
+                                    </p>
+                                </div>
                             </div>
 
-                            <div className="prose prose-invert max-w-none">
-                                <p className="text-gray-300 text-lg leading-loose whitespace-pre-wrap">
-                                    {detailBook.description}
+                            <div className="p-6 border-t border-white/10 bg-black/20 shrink-0">
+                                <p className="text-xs text-gray-500 text-center font-bold tracking-widest uppercase">
+                                    BiblioMind Archival Vault • {new Date().getFullYear()}
                                 </p>
                             </div>
                         </div>
-
-                        <div className="p-6 border-t border-white/10 bg-black/20 shrink-0">
-                            <p className="text-xs text-gray-500 text-center font-medium font-heading">
-                                BiblioMind Archival Vault • {new Date().getFullYear()}
-                            </p>
-                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Glassmorphism Delete Confirmation Modal */}
-            {isConfirmModalOpen && (
-                <div className="fixed inset-0 z-[110] flex items-center justify-center px-4">
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setIsConfirmModalOpen(false)}></div>
-                    <div className="relative w-[95%] sm:w-full max-w-sm mx-auto bg-[#0a0a0c]/80 border border-brand/50 rounded-3xl p-6 sm:p-8 shadow-[0_0_15px_rgba(168,85,247,0.3)] animate-in fade-in zoom-in duration-300 overflow-hidden glassmorphism">
-                        {/* Glow Accent */}
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
+            {
+                isConfirmModalOpen && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center px-4">
+                        <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setIsConfirmModalOpen(false)}></div>
+                        <div className="relative w-[95%] sm:w-full max-w-sm mx-auto bg-[#0a0a0c]/80 border border-brand/50 rounded-3xl p-6 sm:p-8 shadow-[0_0_15px_rgba(168,85,247,0.3)] animate-in fade-in zoom-in duration-300 overflow-hidden glassmorphism">
+                            {/* Glow Accent */}
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand to-transparent"></div>
 
-                        <div className="w-14 h-14 rounded-2xl bg-brand/10 border border-brand/30 text-brand flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(168,85,247,0.2)]">
-                            <Trash2 className="h-7 w-7" />
-                        </div>
-                        <h3 className="text-2xl font-heading font-bold text-white mb-3 text-center">Delete Masterpiece?</h3>
-                        <p className="text-gray-300 text-sm mb-8 text-center leading-relaxed">This action cannot be undone. This title and all its scholarly reviews will be permanently removed.</p>
+                            <div className="w-14 h-14 rounded-2xl bg-brand/10 border border-brand/30 text-brand flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+                                <Trash2 className="h-7 w-7" />
+                            </div>
+                            <h3 className="text-2xl font-heading font-bold text-white mb-3 text-center">Delete Masterpiece?</h3>
+                            <p className="text-gray-300 text-sm mb-8 text-center leading-relaxed">This action cannot be undone. This title and all its scholarly reviews will be permanently removed.</p>
 
-                        <div className="flex gap-4">
-                            <button
-                                onClick={() => setIsConfirmModalOpen(false)}
-                                className="flex-1 py-3 px-4 rounded-xl text-sm font-medium text-gray-400 bg-transparent border border-white/10 hover:border-brand/40 hover:text-white transition-all shadow-none"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmDelete}
-                                className="flex-1 py-3 px-4 rounded-xl text-sm font-bold text-white bg-brand hover:bg-brand/90 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all hover:-translate-y-0.5 border-none"
-                            >
-                                Delete
-                            </button>
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => setIsConfirmModalOpen(false)}
+                                    className="flex-1 py-3 px-4 rounded-xl text-sm font-medium text-gray-400 bg-transparent border border-white/10 hover:border-brand/40 hover:text-white transition-all shadow-none"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={confirmDelete}
+                                    className="flex-1 py-3 px-4 rounded-xl text-sm font-bold text-white bg-brand hover:bg-brand/90 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all hover:-translate-y-0.5 border-none"
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </section>
+                )
+            }
+        </section >
     );
 }
