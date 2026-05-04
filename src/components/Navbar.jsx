@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { BookOpen, Search, User, Bell, LogOut, Settings } from 'lucide-react';
 
 export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn, setIsLoggedIn, isUserOpen, setIsUserOpen, setIsAuthModalOpen, currentUser }) {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const notifRef = useRef(null);
     const userRef = useRef(null);
@@ -192,7 +193,7 @@ export default function Navbar({ searchQuery, setSearchQuery, books, isLoggedIn,
                                                 </a>
 
                                                 {currentUser?.is_staff && (
-                                                    <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 text-sm text-brand border-l-2 border-transparent hover:border-brand hover:bg-brand/5 hover:text-white transition-colors">
+                                                    <a href={`${API_URL}/admin/`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 text-sm text-brand border-l-2 border-transparent hover:border-brand hover:bg-brand/5 hover:text-white transition-colors">
                                                         <Settings className="h-4 w-4" /> Django Admin
                                                     </a>
                                                 )}

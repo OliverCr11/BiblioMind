@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Star, Edit2, Trash2, ChevronRight, X, Save } from 'lucide-react';
 
 export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn, currentUser }) {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
     const [editingBook, setEditingBook] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -40,7 +41,7 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                 headers['Authorization'] = `Token ${token}`;
             }
 
-            const response = await fetch(`http://127.0.0.1:8000/api/books/${bookIdToDelete}/`, {
+            const response = await fetch(`${API_URL}/api/books/${bookIdToDelete}/`, {
                 method: 'DELETE',
                 headers,
             });
@@ -49,11 +50,9 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                 setBooks(prevBooks => prevBooks.filter(book => book.id !== bookIdToDelete));
                 setIsConfirmModalOpen(false);
                 setBookIdToDelete(null);
-            } else {
-                console.error('Failed to delete book');
             }
         } catch (error) {
-            console.error('Error deleting book:', error);
+            // Error handling
         }
     };
 
@@ -68,7 +67,7 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/books/${editingBook.id}/`, {
+            const response = await fetch(`${API_URL}/api/books/${editingBook.id}/`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,11 +96,9 @@ export default function BookGrid({ books, setBooks, searchQuery = '', isLoggedIn
                 ));
                 setIsEditModalOpen(false);
                 setEditingBook(null);
-            } else {
-                console.error('Failed to update book');
             }
         } catch (error) {
-            console.error('Error updating book:', error);
+            // Error handling
         }
     };
 

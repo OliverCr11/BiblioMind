@@ -29,16 +29,16 @@ export default function App() {
         setCurrentUser(JSON.parse(userData));
         setIsLoggedIn(true);
       } catch (e) {
-        console.error("Failed to parse user data from local storage", e);
         localStorage.removeItem('token');
         localStorage.removeItem('user_data');
       }
     }
 
-    fetch('http://127.0.0.1:8000/api/books/')
+    const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+    fetch(`${API_URL}/api/books/`)
       .then(res => res.json())
       .then(data => setBooks(data))
-      .catch(err => console.error('Error fetching books:', err));
+      .catch(() => {});
   }, []);
 
   return (
