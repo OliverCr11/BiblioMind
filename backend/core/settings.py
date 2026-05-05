@@ -144,6 +144,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:5173').split(',')
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://bibliomind-production.up.railway.app",
+    "https://*.railway.app",
+]
 # Production Security Settings (Enabled only when DEBUG=False)
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
@@ -151,3 +155,7 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Railway Proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
