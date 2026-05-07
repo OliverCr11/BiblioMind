@@ -18,7 +18,12 @@ BiblioMind is a full-stack, aesthetically-driven web application designed for di
 
 ---
 
-## ✨ Key Features
+## Live Demo
+Experience the platform here: **[BiblioMind - Live Application](https://biblio-mind.vercel.app)**
+
+---
+
+## Key Features
 
 - **Robust Authentication:** Secure JSON Web Token (JWT) based login and registration system.
 - **Data Management (Full CRUD):** Seamlessly create, read, update, and delete Book listings and User Reviews dynamically without page reloads.
@@ -28,7 +33,7 @@ BiblioMind is a full-stack, aesthetically-driven web application designed for di
 
 ---
 
-## ✦ UI Showcases
+##  UI Showcases
 
 | Modification Interface | Mobile Experience |
 | :---: | :---: |
@@ -36,7 +41,7 @@ BiblioMind is a full-stack, aesthetically-driven web application designed for di
 
 ---
 
-## 🧠 Technical Challenges & Solutions
+## Technical Challenges & Solutions
 
 ### 1. The Layout Spill Issue (CSS Dimension Clamping)
 **Challenge:** Initially, excessively long text inputs for Book Titles and Descriptions caused the `BookCard` components to vertically erupt. The text spilled outside the glassmorphism boundaries, snapped the flex grid layout, and buried critical UI buttons beneath the screen margin.
@@ -52,19 +57,62 @@ BiblioMind is a full-stack, aesthetically-driven web application designed for di
 
 ---
 
-## 🔮 Future AI Roadmap
+## Future AI Roadmap
 
 - [ ] **NLP Sentiment Analysis:** Integrate a Natural Language Processing model to automatically analyze and score the tone of community reviews.
 - [ ] **Smart Recommendations:** Develop an AI-driven engine to suggest books based on a user's reading history and rating patterns.
 
 ---
 
-## 🚀 Installation & Local Setup
+##  Installation & Local Setup
 
-### Backend Configuration (Django)
-1. Navigate to the backend directory and setup the virtual environment: 
-   ```bash
-   cd backend
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
+### Prerequisites
+- Python 3.10+
+- Node.js & npm
+- PostgreSQL (Optional, defaults to SQLite locally)
+
+### 1. Backend Configuration (Django)
+Navigate to the backend directory and setup the virtual environment: 
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Create a `.env` file in the backend directory with the following variables:
+```env
+SECRET_KEY=your_django_secret_key
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+```
+
+Run migrations and start the server:
+```bash
+python manage.py migrate
+python manage.py runserver
+```
+
+### 2. Frontend Configuration (React/Vite)
+Navigate to the root directory (where the React code is) in a new terminal:
+```bash
+npm install
+```
+
+Create a `.env` file in the root of the frontend directory:
+```env
+VITE_API_URL=http://127.0.0.1:8000
+```
+
+Start the development server:
+```bash
+npm run dev
+```
+
+---
+
+## Author
+**Oliver**  
+*Full Stack Web Developer*  
+Aesthetic & Philosophy: Dark Luxury Tech | Solution-oriented design.
