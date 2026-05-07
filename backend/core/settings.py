@@ -148,6 +148,11 @@ CSRF_TRUSTED_ORIGINS = [
     "https://bibliomind-production.up.railway.app",
     "https://*.railway.app",
 ]
+
+# Railway Proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
 # Production Security Settings (Enabled only when DEBUG=False)
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
@@ -156,6 +161,3 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# Railway Proxy
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
