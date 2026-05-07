@@ -20,8 +20,7 @@ export default function AuthModal({ setIsAuthModalOpen, setIsLoggedIn, setCurren
             return;
         }
 
-        const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-        const endpoint = isLoginTab ? `${API_URL}/api/login/` : `${API_URL}/api/register/`;
+        const endpoint = isLoginTab ? `${import.meta.env.VITE_API_URL}/api/login/` : `${import.meta.env.VITE_API_URL}/api/register/`;
         const payload = isLoginTab ? { username, password } : { username, email, password };
 
         try {

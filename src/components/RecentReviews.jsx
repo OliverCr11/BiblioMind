@@ -67,7 +67,7 @@ export default function RecentReviews({ isLoggedIn, books = [], currentUser }) {
     const [reviewIdToDelete, setReviewIdToDelete] = useState(null);
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/reviews/')
+        fetch(`${import.meta.env.VITE_API_URL}/api/reviews/`)
             .then(res => res.json())
             .then(data => {
                 // Display only the 3 most recent community reviews
@@ -87,7 +87,7 @@ export default function RecentReviews({ isLoggedIn, books = [], currentUser }) {
                 const headers = { 'Content-Type': 'application/json' };
                 if (token) headers['Authorization'] = `Token ${token}`;
 
-                const response = await fetch(`http://127.0.0.1:8000/api/reviews/${editingReview.id}/`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${editingReview.id}/`, {
                     method: 'PATCH',
                     headers,
                     body: JSON.stringify({ rating, comment })
@@ -120,7 +120,7 @@ export default function RecentReviews({ isLoggedIn, books = [], currentUser }) {
             const headers = { 'Content-Type': 'application/json' };
             if (token) headers['Authorization'] = `Token ${token}`;
 
-            const response = await fetch('http://127.0.0.1:8000/api/reviews/', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(reviewPayload),
@@ -156,7 +156,7 @@ export default function RecentReviews({ isLoggedIn, books = [], currentUser }) {
             const headers = { 'Content-Type': 'application/json' };
             if (token) headers['Authorization'] = `Token ${token}`;
 
-            const response = await fetch(`http://127.0.0.1:8000/api/reviews/${reviewIdToDelete}/`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/${reviewIdToDelete}/`, {
                 method: 'DELETE',
                 headers,
             });
@@ -193,7 +193,7 @@ export default function RecentReviews({ isLoggedIn, books = [], currentUser }) {
                 <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand/5 rounded-full blur-[150px] pointer-events-none"></div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="flex items-center justify-between mb-12">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-12">
                         <div>
                             <h2 className="text-3xl font-heading font-bold mb-3 flex items-center gap-3">
                                 <span className="w-2 h-8 bg-brand rounded-full inline-block"></span>
@@ -204,7 +204,7 @@ export default function RecentReviews({ isLoggedIn, books = [], currentUser }) {
                         {isLoggedIn && (
                             <button
                                 onClick={() => setIsReviewModalOpen(true)}
-                                className="hidden md:flex items-center gap-2 bg-brand/10 hover:bg-brand text-brand hover:text-white border border-brand/30 hover:border-brand px-6 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+                                className="flex items-center justify-center gap-2 w-full md:w-auto bg-brand/10 hover:bg-brand text-brand hover:text-white border border-brand/30 hover:border-brand px-6 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.15)] hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]"
                             >
                                 <Edit3 className="h-4 w-4" /> Write a Review
                             </button>

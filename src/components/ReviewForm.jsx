@@ -30,8 +30,7 @@ export default function ReviewForm({ setBooks, isLoggedIn, onLoginRedirect }) {
                 headers['Authorization'] = `Token ${token}`;
             }
 
-            const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-            const response = await fetch(`${API_URL}/api/books/`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/books/`, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(newBook),
@@ -49,7 +48,7 @@ export default function ReviewForm({ setBooks, isLoggedIn, onLoginRedirect }) {
                         comment: description || "No written review."
                     };
 
-                    const reviewResponse = await fetch(`${API_URL}/api/reviews/`, {
+                    const reviewResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews/`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
